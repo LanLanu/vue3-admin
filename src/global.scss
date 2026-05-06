@@ -1,0 +1,21 @@
+// 引入全局样式
+@import "normalize.css";
+
+// 定义全局变量
+:root {
+  // 比html优先级高
+  --color-aaaa: #333;
+}
+// 使用变量
+// .box{
+//  --color-aaaa : #333;如果有优先使用，逐级往上使用变量
+//   color: var(--color-aaaa);
+// }
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: antiquewhite;
+}
