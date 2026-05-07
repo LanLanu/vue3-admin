@@ -16,11 +16,19 @@
         <el-input v-model="form.password" type="password" autocomplete="off" />
       </el-form-item>
       <el-form-item label="验证码" prop="verifyCode">
-        <el-input v-model.number="form.verifyCode" style="width: 100px" />
-        <Captcha />
+        <el-input
+          v-model="form.verifyCode"
+          style="width: 100px"
+          @keyup.enter="submitForm"
+        />
+        <Captcha ref="captchaRef" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm(formRef)">
+        <el-button
+          type="primary"
+          @click="submitForm(formRef)"
+          :loading="loading"
+        >
           登录
         </el-button>
       </el-form-item>
@@ -30,10 +38,19 @@
 <script setup>
 import { ref } from "vue";
 import Captcha from "./components/captcha.vue";
+import { useStore } from "vuex";
 const formRef = ref(null);
+import { useRouter, useRoute } from "vue-router";
+import { ElMessage } from "element-plus";
+import { login } from "@/api/user";
+const router = useRouter();
+const route = useRoute();
+const captchaRef = ref(null);
+const store = useStore();
+const loading = ref(false);
 const form = ref({
-  username: "",
-  password: "",
+  username: "admin",
+  password: "123456",
   verifyCode: "",
 });
 
@@ -45,6 +62,28 @@ const rules = ref({
 
 const submitForm = async () => {
   await formRef.value.validate();
+  try {
+    loading.value = true;
+    const res = await store.dispatch("user/login", {
+      ...form.value,
+      captchaId: captchaRef.value.captchaId,
+    });
+    await store.dispatch("user/getPerson");
+    ElMessage({
+      message: "登录成功",
+      type: "success",
+      duration: 1000,
+      onClose: () => {
+        loading.value = false;
+        const redirect = route.query.redirect || "/";
+        router.replace(redirect);
+      },
+    });
+  } catch (error) {
+    loading.value = false;
+    form.value.verifyCode = "";
+    captchaRef.value.refresh();
+  }
 };
 
 const resetForm = (formEl) => {

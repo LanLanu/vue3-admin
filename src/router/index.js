@@ -1,8 +1,5 @@
-import {
-  createRouter,
-  createMemoryHistory,
-  createWebHistory,
-} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
+import store from "@/store";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -34,5 +31,19 @@ const router = createRouter({
       ],
     },
   ],
+});
+// 路由拦截白名单
+const whiteName = ["login"];
+router.beforeEach((to, from, next) => {
+  if (!whiteName.includes(to.name)) {
+    // 登录校验
+    const token = store.state.user.token;
+    // console.log(">>token>>>", token);
+    if (!token) {
+      console.log(">>>>>", 11);
+      return next({ name: "login", query: { redirect: to.fullPath } });
+    }
+  }
+  next();
 });
 export default router;

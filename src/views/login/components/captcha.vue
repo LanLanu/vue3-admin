@@ -4,7 +4,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import { getCaptcha } from "@/api/aaa";
+import { getCaptcha } from "@/api/user";
 import { ElMessage } from "element-plus";
 defineOptions({
   name: "Captcha",
@@ -16,7 +16,6 @@ const refresh = async () => {
   if (data.code == 1000) {
     svg.value = data.data.data;
     captchaId.value = data.data.captchaId;
-    ElMessage.primary("This is a primary message.");
   }
 };
 onMounted(() => {
@@ -24,6 +23,7 @@ onMounted(() => {
 });
 defineExpose({
   captchaId,
+  refresh,
 });
 </script>
 <style scoped lang="scss">
