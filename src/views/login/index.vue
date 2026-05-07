@@ -68,12 +68,13 @@ const submitForm = async () => {
       ...form.value,
       captchaId: captchaRef.value.captchaId,
     });
-    await store.dispatch("user/getPerson");
     ElMessage({
       message: "登录成功",
       type: "success",
       duration: 1000,
-      onClose: () => {
+      onClose: async () => {
+        await store.dispatch("user/getPerson");
+        console.log(">>>>>", 111222);
         loading.value = false;
         const redirect = route.query.redirect || "/";
         router.replace(redirect);

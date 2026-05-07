@@ -11,3 +11,8 @@ export const getUserInfo = async () => {
     headers: { Authorization: store2.get("token") },
   });
 };
+export const logout = async () => {
+  return request.post("/admin/base/comm/logout", null, {
+    headers: { Authorization: store2.get("token") },
+  });
+};

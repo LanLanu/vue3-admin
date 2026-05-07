@@ -1,4 +1,4 @@
-import { getUserInfo, login } from "@/api/user";
+import { getUserInfo, login, logout } from "@/api/user";
 import store2 from "store2";
 export default {
   namespaced: true,
@@ -42,6 +42,10 @@ export default {
         commit("setInfo", res.data.info);
       }
       return res.data.info;
+    },
+    async logout({ commit }, payload) {
+      const res = await logout();
+      return res.data;
     },
   },
 };

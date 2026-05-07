@@ -40,10 +40,9 @@ router.beforeEach((to, from, next) => {
     const token = store.state.user.token;
     // console.log(">>token>>>", token);
     if (!token) {
-      console.log(">>>>>", 11);
       return next({ name: "login", query: { redirect: to.fullPath } });
     }
   }
-  next();
+  return next();
 });
 export default router;

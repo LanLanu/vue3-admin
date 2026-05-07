@@ -1,8 +1,12 @@
 <template>
   <div class="app-layout">
-    <div class="app-layout__left"></div>
+    <div class="app-layout__left">
+      <appMenu></appMenu>
+    </div>
     <div class="app-layout__right">
-      <div class="app-layout__top"></div>
+      <div class="app-layout__top">
+        <appHeader></appHeader>
+      </div>
       <div class="app-layout__container">
         <RouterView />
       </div>
@@ -11,7 +15,11 @@
   <hr />
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, watch, onMounted } from "vue";
+import appHeader from "./components/app-header.vue";
+import appMenu from "./components/app-menu.vue";
+</script>
 <style scoped lang="scss">
 .app-layout {
   display: flex;
