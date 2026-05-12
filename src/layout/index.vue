@@ -24,20 +24,17 @@ import appMenu from "./components/app-menu.vue";
 .app-layout {
   display: flex;
   height: 100%;
-  background-color: cadetblue;
   .app-layout__left {
     width: 200px;
     background-color: chocolate;
   }
   .app-layout__right {
     flex: 1;
-    background-color: aquamarine;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     .app-layout__top {
       height: 64px;
-      background-color: red;
     }
     .app-layout__container {
       flex: 1;

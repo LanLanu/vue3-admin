@@ -77,7 +77,7 @@ const submitForm = async () => {
         console.log(">>>>>", 111222);
         loading.value = false;
         const redirect = route.query.redirect || "/";
-        router.replace(redirect);
+        router.push(redirect);
       },
     });
   } catch (error) {

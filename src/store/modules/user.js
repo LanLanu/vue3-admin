@@ -18,6 +18,7 @@ export default {
       store2.add("refreshToken", refreshToken);
     },
     setInfo(state, info) {
+      state.info = info;
       store2.add("info", info);
     },
     setMeuns(state, meuns) {

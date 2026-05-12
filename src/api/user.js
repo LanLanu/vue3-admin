@@ -7,12 +7,8 @@ export const login = async (data) => {
   return request.post("/admin/base/open/login", data);
 };
 export const getUserInfo = async () => {
-  return request.get("/admin/base/comm/person", {
-    headers: { Authorization: store2.get("token") },
-  });
+  return request.get("/admin/base/comm/person");
 };
 export const logout = async () => {
-  return request.post("/admin/base/comm/logout", null, {
-    headers: { Authorization: store2.get("token") },
-  });
+  return request.post("/admin/base/comm/logout");
 };

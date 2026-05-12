@@ -6,6 +6,7 @@ import axios from "axios";
 import { ElMessage } from "element-plus";
 import store2 from "store2";
 import { useRouter } from "vue-router";
+import router from "@/router";
 const instance = axios.create({
   // TODO 处理本地生产环境变量
   baseURL: "http://127.0.0.1:8001",
@@ -20,6 +21,10 @@ instance.interceptors.request.use(
     // 在发送请求之前做些什么
     // config.params = { a: "b" };
     // config.headers.Authorization = "sss";
+    let token = store2.get("token");
+    if (token) {
+      config.headers.Authorization = token;
+    }
     return config;
   },
   (error) => {
@@ -45,7 +50,7 @@ instance.interceptors.response.use(
     }
   },
   (error) => {
-    const router = useRouter();
+    // const router = useRouter();
     // 非 2xx 范围的状态码都会触发该函数。业务状态码处理
     // 对响应错误做点什么
     const { response } = error;
@@ -53,7 +58,8 @@ instance.interceptors.response.use(
     switch (status) {
       case 401:
         ElMessage.error("身份过期，请重新登录");
-        router.push("/login");
+        localStorage.clear();
+        router.replace("/login");
         break;
       case 403:
         ElMessage.error("无权限访问");

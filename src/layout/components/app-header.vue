@@ -1,6 +1,14 @@
 <template>
   <div class="app-header">
-    <div class="app-header__left">22</div>
+    <div class="app-header__left">
+      <div class="collase-area" @click="handleCollapse(!collapsed)">
+        <el-icon><Expand v-if="collapsed" /> <Fold v-else /></el-icon>
+      </div>
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/' }">工作台</el-breadcrumb-item>
+        <el-breadcrumb-item> 组件库 </el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <div class="app-header__right">
       <el-dropdown trigger="click">
         <div style="display: flex">
@@ -26,6 +34,7 @@
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
 defineOptions({
   name: "app-header",
 });
@@ -35,10 +44,17 @@ const info = computed(() => {
   console.log(">>>>>store.state.user.info", store.state.user.info);
   return store.state.user.info;
 });
+const collapsed = computed(() => {
+  return store.state.app.collapsed;
+});
 const handleLoginOut = async () => {
   await store.dispatch("user/logout");
   localStorage.clear();
+  ElMessage.success("退出成功");
   router.replace("/login");
+};
+const handleCollapse = async (flag) => {
+  await store.dispatch("app/changeCollpased", flag);
 };
 </script>
 <style scoped lang="scss">
@@ -48,7 +64,14 @@ const handleLoginOut = async () => {
   align-items: center;
   padding: 0 20px;
   height: 100%;
+  box-sizing: border-box;
   .app-header__left {
+    display: flex;
+    .collase-area {
+      font-size: 18px;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
   }
   .app-header__right {
     display: flex;

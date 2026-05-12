@@ -38,7 +38,6 @@ router.beforeEach((to, from, next) => {
   if (!whiteName.includes(to.name)) {
     // 登录校验
     const token = store.state.user.token;
-    // console.log(">>token>>>", token);
     if (!token) {
       return next({ name: "login", query: { redirect: to.fullPath } });
     }
