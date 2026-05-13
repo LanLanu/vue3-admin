@@ -71,7 +71,7 @@ const submitForm = async () => {
     ElMessage({
       message: "登录成功",
       type: "success",
-      duration: 1000,
+      duration: 1500,
       onClose: async () => {
         await store.dispatch("user/getPerson");
         console.log(">>>>>", 111222);

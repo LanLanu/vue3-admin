@@ -5,28 +5,43 @@ const router = createRouter({
   routes: [
     {
       path: "/login",
-      name: "login",
+      name: "登录",
       component: () => import("../views/login/index.vue"),
     },
     {
       path: "/",
-      name: "index",
+      name: "Dashboard",
       component: () => import("../layout/index.vue"),
       children: [
         {
           path: "/dashboard/console",
-          name: "dashboard_console",
+          name: "主控台",
           component: () => import("../views/dashboard/console.vue"),
         },
         {
           path: "/dashboard/workplace",
-          name: "dashboard_workplace",
+          name: "工作台",
           component: () => import("../views/dashboard/workplace.vue"),
         },
         {
           path: "/dashboard/monitor",
-          name: "dashboard_monitor",
+          name: "监控台",
           component: () => import("../views/dashboard/monitor.vue"),
+        },
+        {
+          path: "/system/menu",
+          name: "菜单列表",
+          component: () => import("../views/system/menu/index.vue"),
+        },
+        {
+          path: "/system/user",
+          name: "用户列表",
+          component: () => import("../views/system/user/index.vue"),
+        },
+        {
+          path: "/system/role",
+          name: "角色列表",
+          component: () => import("../views/system/role/index.vue"),
         },
       ],
     },
@@ -35,6 +50,8 @@ const router = createRouter({
 // 路由拦截白名单
 const whiteName = ["login"];
 router.beforeEach((to, from, next) => {
+  // TODO 面包屑
+  console.log(">>>>>toto", to);
   if (!whiteName.includes(to.name)) {
     // 登录校验
     const token = store.state.user.token;

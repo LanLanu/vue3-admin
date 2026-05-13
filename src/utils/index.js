@@ -3,7 +3,7 @@
  * @param {*} list
  * @returns
  */
-export function deepTree(list) {
+export function deepTree(list = []) {
   const result = [];
   let map = {};
   //   添加id对应他的映射{1:{id:1,...}}
@@ -27,4 +27,3 @@ export function deepTree(list) {
   }
   return result;
 }
-console.log(">>>>>", deepTree(list));

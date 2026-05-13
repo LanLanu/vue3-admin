@@ -12,7 +12,6 @@
       </div>
     </div>
   </div>
-  <hr />
 </template>
 
 <script setup>
@@ -25,8 +24,7 @@ import appMenu from "./components/app-menu.vue";
   display: flex;
   height: 100%;
   .app-layout__left {
-    width: 200px;
-    background-color: chocolate;
+    overflow: hidden;
   }
   .app-layout__right {
     flex: 1;
@@ -41,9 +39,5 @@ import appMenu from "./components/app-menu.vue";
       background-color: forestgreen;
     }
   }
-  h1 {
-  }
-}
-hr {
 }
 </style>
