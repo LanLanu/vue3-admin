@@ -7,9 +7,11 @@ import { ElMessage } from "element-plus";
 import store2 from "store2";
 import { useRouter } from "vue-router";
 import router from "@/router";
+import store from "@/store";
 const instance = axios.create({
   // TODO 处理本地生产环境变量
-  baseURL: "http://127.0.0.1:8001",
+  // baseURL: "/api",
+  baseURL: import.meta.env.VITE_API_BASEURL,
   timeout: 3 * 1000, // 请求超时3秒
 });
 /**
@@ -50,16 +52,20 @@ instance.interceptors.response.use(
     }
   },
   (error) => {
+    // 超时拦截
     // const router = useRouter();
     // 非 2xx 范围的状态码都会触发该函数。业务状态码处理
     // 对响应错误做点什么
-    const { response } = error;
+    let { response } = error;
+    if (!response) {
+      response = { status: 500, message: "网络异常，请稍后重试！" };
+    }
     const { status } = response;
     switch (status) {
       case 401:
         ElMessage.error("身份过期，请重新登录");
-        localStorage.clear();
-        router.replace("/login");
+        // 退出登录需要接口
+        store.dispatch("user/logout", false);
         break;
       case 403:
         ElMessage.error("无权限访问");
@@ -68,6 +74,12 @@ instance.interceptors.response.use(
         ElMessage.error("请求地址不存在");
         break;
       case 500:
+        ElMessage.error("网络异常，请稍后重试！");
+        break;
+      case 502:
+        ElMessage.error("网关错误");
+        break;
+      case 503:
         ElMessage.error("服务器错误");
         break;
     }

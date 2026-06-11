@@ -2,7 +2,10 @@
   <div class="app-header">
     <div class="app-header__left">
       <div class="collase-area" @click="handleCollapse(!collapsed)">
-        <el-icon><Expand v-if="collapsed" /> <Fold v-else /></el-icon>
+        <el-icon>
+          <Expand v-if="collapsed" />
+          <Fold v-else />
+        </el-icon>
       </div>
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">工作台</el-breadcrumb-item>
@@ -20,9 +23,7 @@
             <el-dropdown-item icon="Plus">{{ info.username }}</el-dropdown-item>
             <el-dropdown-item icon="User">个人中心</el-dropdown-item>
             <!-- <el-dropdown-item icon="SwitchButton">退出登录</el-dropdown-item> -->
-            <el-dropdown-item @click="handleLoginOut"
-              ><i class="iconfont icon-tuichu"></i>退出登录</el-dropdown-item
-            >
+            <el-dropdown-item @click="handleLoginOut"><i class="iconfont icon-tuichu"></i>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -33,15 +34,16 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
 defineOptions({
   name: "app-header",
 });
 const router = useRouter();
+const route = useRoute();
 const store = useStore();
 const info = computed(() => {
-  console.log(">>>>>store.state.user.info", store.state.user.info);
+  console.log('>>>>route>', route);
   return store.state.user.info;
 });
 const collapsed = computed(() => {
@@ -49,9 +51,7 @@ const collapsed = computed(() => {
 });
 const handleLoginOut = async () => {
   await store.dispatch("user/logout");
-  localStorage.clear();
   ElMessage.success("退出成功");
-  router.replace("/login");
 };
 const handleCollapse = async (flag) => {
   await store.dispatch("app/changeCollpased", flag);
@@ -65,20 +65,25 @@ const handleCollapse = async (flag) => {
   padding: 0 20px;
   height: 100%;
   box-sizing: border-box;
+
   .app-header__left {
     display: flex;
+
     .collase-area {
       font-size: 18px;
       cursor: pointer;
       box-sizing: border-box;
     }
   }
+
   .app-header__right {
     display: flex;
     align-items: center;
+
     p {
       margin-right: 10px;
     }
+
     .avatar {
       width: 40px;
       height: 40px;

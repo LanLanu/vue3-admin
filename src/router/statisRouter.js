@@ -1,44 +1,40 @@
-routes: [
+export default [
   {
     path: "/login",
-    name: "登录",
+    name: "login",
     component: () => import("../views/login/index.vue"),
   },
+
   {
     path: "/",
-    name: "Dashboard",
+    name: "index",
     component: () => import("../layout/index.vue"),
     children: [
+      // 自定义指令 
       {
-        path: "/dashboard/console",
-        name: "主控台",
-        component: () => import("../views/dashboard/console.vue"),
+        path: "/customDirective",
+        name: "自定义指令",
+        component: () => import("@/views/customDirective/index.vue"),
       },
+      // 403 无权限页
       {
-        path: "/dashboard/workplace",
-        name: "工作台",
-        component: () => import("../views/dashboard/workplace.vue"),
+        path: "/403",
+        name: "403",
+        component: () => import("@/views/error/403.vue"),
       },
+      // 404 无权限页
       {
-        path: "/dashboard/monitor",
-        name: "监控台",
-        component: () => import("../views/dashboard/monitor.vue"),
+        path: "/404",
+        name: "404",
+        component: () => import("@/views/error/404.vue"),
       },
-      {
-        path: "/system/menu",
-        name: "菜单列表",
-        component: () => import("../views/system/menu/index.vue"),
-      },
-      {
-        path: "/system/user",
-        name: "用户列表",
-        component: () => import("../views/system/user/index.vue"),
-      },
-      {
-        path: "/system/role",
-        name: "角色列表",
-        component: () => import("../views/system/role/index.vue"),
-      },
+      // 404 必须放路由最底部 匹配静态路由和动态路由之外的
+      // // TODO router4和router3有区别
+      // {
+      //   path: "/:pathMatch(.*)*",
+      //   name: "404",
+      //   component: () => import("../views/error/404.vue"),
+      // },
     ],
   },
 ];

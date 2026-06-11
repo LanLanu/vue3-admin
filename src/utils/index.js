@@ -27,3 +27,14 @@ export function deepTree(list = []) {
   }
   return result;
 }
+/**
+ * 判断是否有子集
+ * @param {*} list 
+ * @param {*} id 
+ * @returns {Boolean}
+ *  true 表示无子集
+ *  false 表示有子集
+ */
+export function isLeaf(list,id){
+  return list.every(item=>item.parentId !== id) 
+}

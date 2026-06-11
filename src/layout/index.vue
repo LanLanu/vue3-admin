@@ -23,20 +23,27 @@ import appMenu from "./components/app-menu.vue";
 .app-layout {
   display: flex;
   height: 100%;
+
   .app-layout__left {
     overflow: hidden;
   }
+
   .app-layout__right {
     flex: 1;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+
     .app-layout__top {
       height: 64px;
     }
+
     .app-layout__container {
       flex: 1;
-      background-color: forestgreen;
+      background-color: #e8e5e5;
+      padding: 10px;
+      box-sizing: border-box;
+      overflow: auto;
     }
   }
 }

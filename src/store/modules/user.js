@@ -1,35 +1,42 @@
 import { getUserInfo, login, logout } from "@/api/user";
 import store2 from "store2";
 import { deepTree } from "@/utils";
+import { ElMessage } from "element-plus";
+import router from "@/router";
 export default {
   namespaced: true,
   state: {
-    info: store2.get("info") || {},
-    menus: store2.get("menus") || [],
+    info:  {},
+    menus: [],
     token: store2.get("token") || "",
-    routes: store2.get("routes") || "",
+    routes: [],
+    permissions:[],
+    isAdd: false,
     refreshToken: store2.get("refreshToken") || "",
   },
   mutations: {
+    setPermissions(state, permissions) {
+      state.permissions = permissions;
+    },
+    setIsAdd(state, isAdd) {
+      state.isAdd = isAdd;
+    },
     setToken(state, token) {
       state.token = token;
       store2.add("token", token);
     },
     setRoutes(state, routes) {
       state.routes = routes;
-      store2.add("routes", routes);
     },
     setRefreshToken(state, refreshToken) {
-      state.refreshToken = refreshToken;
       store2.add("refreshToken", refreshToken);
+      state.refreshToken = refreshToken;
     },
     setInfo(state, info) {
       state.info = info;
-      store2.add("info", info);
     },
     setmenus(state, menus) {
       state.menus = menus;
-      store2.add("menus", menus);
     },
   },
   actions: {
@@ -52,16 +59,24 @@ export default {
           deepTree(res.data.menus.filter((item) => item.type != "2")),
         );
         // 路由数据
-        commit(
-          "setRoutes",
-          res.data.menus.filter((item) => item.type == "1"),
-        );
+        let routes = res.data.menus
+          .filter((item) => item.type == "1")
+          .map((item) => item.router);
+        commit("setRoutes", routes);
+        // 按钮权限数据
+        const perms = res.data.menus.filter(item=>item.type=='2').map(item=>item.perms.split(",")).flat();
+        console.log('>>>perms>>',perms);  
+        commit("setPermissions", perms);
+
       }
-      return res.data.info;
+      return res.data.menus.filter((item) => item.type == "1");
     },
-    async logout({ commit }, payload) {
-      const res = await logout();
-      return res.data;
+    async logout({ commit }, flag = true) {
+      flag && (await logout());
+      commit("setIsAdd", false);
+      // 清理
+      store2.clearAll();
+      router.replace("/login");
     },
   },
 };

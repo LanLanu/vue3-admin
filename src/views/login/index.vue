@@ -72,8 +72,7 @@ const submitForm = async () => {
       message: "登录成功",
       type: "success",
       duration: 1500,
-      onClose: async () => {
-        await store.dispatch("user/getPerson");
+      onClose: () => {
         console.log(">>>>>", 111222);
         loading.value = false;
         const redirect = route.query.redirect || "/";
