@@ -23,7 +23,9 @@
             <el-dropdown-item icon="Plus">{{ info.username }}</el-dropdown-item>
             <el-dropdown-item icon="User">个人中心</el-dropdown-item>
             <!-- <el-dropdown-item icon="SwitchButton">退出登录</el-dropdown-item> -->
-            <el-dropdown-item @click="handleLoginOut"><i class="iconfont icon-tuichu"></i>退出登录</el-dropdown-item>
+            <el-dropdown-item @click="handleLoginOut"
+              ><i class="iconfont icon-tuichu"></i>退出登录</el-dropdown-item
+            >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -36,6 +38,10 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
+import { useAppStore } from "@/store/modules/app";
+import { useUserStore } from "@/store/modules/user";
+const user = useUserStore();
+const app = useAppStore();
 defineOptions({
   name: "app-header",
 });
@@ -43,18 +49,18 @@ const router = useRouter();
 const route = useRoute();
 const store = useStore();
 const info = computed(() => {
-  console.log('>>>>route>', route);
-  return store.state.user.info;
+  console.log(">>>>route>", route);
+  return user.info;
 });
 const collapsed = computed(() => {
-  return store.state.app.collapsed;
+  return app.collapsed;
 });
 const handleLoginOut = async () => {
-  await store.dispatch("user/logout");
+  user.logout();
   ElMessage.success("退出成功");
 };
 const handleCollapse = async (flag) => {
-  await store.dispatch("app/changeCollpased", flag);
+  app.changeCollpased(flag);
 };
 </script>
 <style scoped lang="scss">

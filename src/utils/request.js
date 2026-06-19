@@ -7,7 +7,7 @@ import { ElMessage } from "element-plus";
 import store2 from "store2";
 import { useRouter } from "vue-router";
 import router from "@/router";
-import store from "@/store";
+import { useUserStore } from "@/store/modules/user";
 const instance = axios.create({
   // TODO 处理本地生产环境变量
   // baseURL: "/api",
@@ -61,11 +61,12 @@ instance.interceptors.response.use(
       response = { status: 500, message: "网络异常，请稍后重试！" };
     }
     const { status } = response;
+    const userStore = useUserStore();
     switch (status) {
       case 401:
         ElMessage.error("身份过期，请重新登录");
         // 退出登录需要接口
-        store.dispatch("user/logout", false);
+        userStore.logout();
         break;
       case 403:
         ElMessage.error("无权限访问");

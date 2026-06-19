@@ -1,8 +1,16 @@
 <template>
   <div class="app-menu">
-    <el-menu @select="handleSkipRouter" :collapse="collapsed" :default-active="route.path">
+    <el-menu
+      @select="handleSkipRouter"
+      :collapse="collapsed"
+      :default-active="route.path"
+    >
       <!-- 菜单权限 -->
-      <MenuItem v-for="(model, index) in menus" :model="model" :key="index"></MenuItem>
+      <MenuItem
+        v-for="(model, index) in menus"
+        :model="model"
+        :key="index"
+      ></MenuItem>
     </el-menu>
   </div>
 </template>
@@ -12,15 +20,17 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 import MenuItem from "./MenuItem.vue";
-const store = useStore();
+import { useUserStore } from "@/store/modules/user.js";
+import { useAppStore } from "@/store/modules/app.js";
+const app = useAppStore();
+const user = useUserStore();
 const router = useRouter();
 const route = useRoute();
 const menus = computed(() => {
-  console.log('>>>>>store.state.user.menus', store.state.user.menus);
-  return store.state.user.menus;
+  return user.menus;
 });
 const collapsed = computed(() => {
-  return store.state.app.collapsed;
+  return app.collapsed;
 });
 
 const handleSkipRouter = (index) => {
@@ -38,7 +48,6 @@ const handleSkipRouter = (index) => {
   }
 
   ::v-deep(.el-menu--collapse) {
-
     .el-sub-menu__icon-arrow,
     span {
       display: none;

@@ -10,10 +10,11 @@ import router from "./router";
 /**
  * 按需引入 (api函数引用式)Elemssage、message-box、 notification组件,
  */
-import 'element-plus/es/components/message/style/css'
-import 'element-plus/es/components/notification/style/css'
-import 'element-plus/es/components/message-box/style/css'
-import store from "./store";
+import "element-plus/es/components/message/style/css";
+import "element-plus/es/components/notification/style/css";
+import "element-plus/es/components/message-box/style/css";
+import { createPinia } from "pinia";
+const pinia = createPinia();
 import "./global.scss";
 // import waterMarker from "@/directives/modules/waterMarker.js"
 // import draggable from "./directives/modules/draggable";
@@ -21,7 +22,7 @@ import "./global.scss";
 import directives from "./directives";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 const app = createApp(App);
-app.use(directives)
+app.use(directives);
 // app.directive("waterMarker",waterMarker)
 // app.directive("draggable",draggable)
 // app.directive("auth",auth)
@@ -31,4 +32,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 // app.use(ElementPlus, {
 //   locale: zhCn,
 // })
-app.use(router).use(store).mount("#app");
+app.use(pinia);
+app.use(router);
+app.mount("#app");

@@ -38,15 +38,15 @@
 <script setup>
 import { ref } from "vue";
 import Captcha from "./components/captcha.vue";
-import { useStore } from "vuex";
 const formRef = ref(null);
 import { useRouter, useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
 import { login } from "@/api/user";
+import { useUserStore } from "@/store/modules/user.js";
+const useStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
 const captchaRef = ref(null);
-const store = useStore();
 const loading = ref(false);
 const form = ref({
   username: "admin",
@@ -64,10 +64,12 @@ const submitForm = async () => {
   await formRef.value.validate();
   try {
     loading.value = true;
-    const res = await store.dispatch("user/login", {
+
+    const res = await useStore.login({
       ...form.value,
       captchaId: captchaRef.value.captchaId,
     });
+    console.log(">>>>>登录成功");
     ElMessage({
       message: "登录成功",
       type: "success",

@@ -2,17 +2,20 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), AutoImport({
+  plugins: [
+    vue(),
+    AutoImport({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
       resolvers: [ElementPlusResolver()],
-    }),],
+    }),
+  ],
   resolve: {
     // 路径别名
     alias: {
@@ -23,7 +26,7 @@ export default defineConfig({
   },
   // TODO 文件指纹
   server: {
-    // port: 3000,
+    // port: 3000, // 本地启动自定义端口号
     proxy: {
       /**
        * :5173/api  =>  :8001/api

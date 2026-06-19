@@ -1,16 +1,13 @@
-export default {
-  namespaced: true,
-  state: {
-    collapsed: false,
-  },
-  mutations: {
-    setCollapsed(state, payload) {
-      state.collapsed = payload;
-    },
+import { defineStore } from "pinia";
+export const useAppStore = defineStore("app", {
+  state: () => {
+    return {
+      collapsed: false,
+    };
   },
   actions: {
-    changeCollpased({ commit }, payload) {
-      commit("setCollapsed", payload);
+    async changeCollpased(collapsed) {
+      this.collapsed = collapsed;
     },
   },
-};
+});

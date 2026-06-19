@@ -9,8 +9,9 @@ export default [
     path: "/",
     name: "index",
     component: () => import("../layout/index.vue"),
+    redirect: "/dashboard/console",
     children: [
-      // 自定义指令 
+      // 自定义指令
       {
         path: "/customDirective",
         name: "自定义指令",
