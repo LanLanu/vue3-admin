@@ -83,7 +83,7 @@
             >
           </div>
         </div>
-        <!-- 上传进度 -->
+        <!-- 上传1进度 -->
         <div v-if="uploadProgress > 0" class="upload-progress">
           <div class="progress-bar">
             <div
