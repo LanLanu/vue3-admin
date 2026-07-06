@@ -25,7 +25,7 @@ router.beforeEach(async (to, from) => {
     const isAdd = userStore.isAdd;
     if (!isAdd) {
       userStore.isAdd = true;
-
+      console.log(">>>>>获取信息");
       const routes = await userStore.getPerson();
       routes.forEach((item) => {
         router.addRoute("index", {

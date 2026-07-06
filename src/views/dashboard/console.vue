@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup scoped>
 import MenuCheck from "@/components/menu-check/index.vue";
 import RoleSelect from "@/components/role-select/index.vue";
 import { ref } from "vue";

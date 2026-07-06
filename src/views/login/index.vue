@@ -78,6 +78,7 @@ const submitForm = async () => {
         console.log(">>>>>", 111222);
         loading.value = false;
         const redirect = route.query.redirect || "/";
+        console.log(">>>redirect>>", redirect);
         router.push(redirect);
       },
     });

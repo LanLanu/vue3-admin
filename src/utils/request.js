@@ -5,8 +5,9 @@
 import axios from "axios";
 import { ElMessage } from "element-plus";
 import store2 from "store2";
-import { useRouter } from "vue-router";
 import router from "@/router";
+import { getToken, setToken } from "@/utils/index";
+import { refreshToken } from "@/api/user";
 import { useUserStore } from "@/store/modules/user";
 const instance = axios.create({
   // TODO 处理本地生产环境变量
@@ -23,7 +24,7 @@ instance.interceptors.request.use(
     // 在发送请求之前做些什么
     // config.params = { a: "b" };
     // config.headers.Authorization = "sss";
-    let token = store2.get("token");
+    let token = getToken();
     if (token) {
       config.headers.Authorization = token;
     }
@@ -51,9 +52,8 @@ instance.interceptors.response.use(
       return Promise.reject(response);
     }
   },
-  (error) => {
+  async (error) => {
     // 超时拦截
-    // const router = useRouter();
     // 非 2xx 范围的状态码都会触发该函数。业务状态码处理
     // 对响应错误做点什么
     let { response } = error;
@@ -64,10 +64,25 @@ instance.interceptors.response.use(
     const userStore = useUserStore();
     switch (status) {
       case 401:
-        ElMessage.error("身份过期，请重新登录");
-        // 退出登录需要接口
-        userStore.logout();
+        if (error.config.url != "/admin/base/open/refreshToken") {
+          console.log(">>>>>401错误");
+          console.log(">>>>error.config>", error.config);
+          try {
+            const res = await refreshToken(); // TODO 并发会多次发送该请求
+            setToken(res.data.token);
+            // 请求重新发送,
+            const resp = await instance(error.config);
+            return resp;
+          } catch (error) {
+            localStorage.clear();
+            location.reload();
+            return Promise.reject(error);
+          }
+        }
         break;
+      // ElMessage.error("身份过期，请重新登录");
+      // userStore.logout(false);
+      // 退出登录需要接口
       case 403:
         ElMessage.error("无权限访问");
         break;
