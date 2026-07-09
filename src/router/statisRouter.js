@@ -12,11 +12,11 @@ export default [
     redirect: "/dashboard/console",
     children: [
       // 自定义指令
-      {
-        path: "/customDirective",
-        name: "自定义指令",
-        component: () => import("@/views/customDirective/index.vue"),
-      },
+      // {
+      //   path: "/customDirective",
+      //   name: "自定义指令",
+      //   component: () => import("@/views/customDirective/index.vue"),
+      // },
       // 403 无权限页
       {
         path: "/403",

@@ -1,6 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/store/modules/user";
 import routerStatic from "./statisRouter";
+import nprogress from "nprogress";
+//引入进度条样式
+import "nprogress/nprogress.css";
+// https://www.npmjs.com/package/nprogress
+nprogress.configure({ showSpinner: false });
 // 动态导入组件模块        /**/表示深层搜索
 const modules = import.meta.glob("../views/**/*.vue", { eager: false });
 console.log(">>>>>modules", modules); // ../views/customDirective/index.vue: () => import("/src/views/customDirective/index.vue")
@@ -12,6 +17,7 @@ const router = createRouter({
 // 路由拦截白名单
 const whiteName = ["login", "403", "404"];
 router.beforeEach(async (to, from) => {
+  nprogress.start();
   const userStore = useUserStore();
   // TODO 面包屑
   // console.log(">>>>>toto", to);
@@ -48,5 +54,9 @@ router.beforeEach(async (to, from) => {
     // }
   }
   return true;
+});
+//全局后置守卫
+router.afterEach(() => {
+  nprogress.done();
 });
 export default router;
