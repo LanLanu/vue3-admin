@@ -18,7 +18,7 @@
         :model="item"
       ></MenuItem>
     </el-sub-menu>
-    <el-menu-item v-else :index="props.model.router || props.model.name">
+    <el-menu-item v-else :index="props.model.router || ''">
       <el-icon>
         <component :is="props.model.icon"></component>
       </el-icon>
