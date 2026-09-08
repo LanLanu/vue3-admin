@@ -61,7 +61,7 @@ export default defineConfig(({ mode }) => {
       sourcemap: false, // 不生成 source map
       terserOptions: {
         compress: {
-          // 打包时清除 console 和 debug 相关代码1
+          // 打包时清除 console 和 debug 相关代码
           drop_console: true,
           drop_debugger: true,
         },
