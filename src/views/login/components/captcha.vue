@@ -28,13 +28,9 @@ defineExpose({
 </script>
 <style scoped lang="scss">
 .captcha-box {
-  width: 150px;
+  width: 146px;
   height: 40px;
-  background-color: #ccc;
-  margin-left: 20px;
-  ::v-deep(svg) {
-    width: 100%;
-    height: 100%;
-  }
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
 }
 </style>

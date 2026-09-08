@@ -16,7 +16,28 @@
       </el-breadcrumb>
     </div>
     <div class="app-header__right">
-      <el-dropdown trigger="click">
+      <div class="phone-area">
+        <el-tooltip content="Bottom center" placement="bottom" effect="light">
+          <template #content>
+            <div>
+              <div style="margin-bottom: 2px; text-align: center">扫一扫</div>
+              <!-- <Vue3NextQrcode
+                text="https://github.com/XiaoDaiGua-Ray/vue3-next-qrcode"
+              /> -->
+              <!-- text="https://bluecp.xyz/download/blueapp.apk" -->
+              <Vue3NextQrcode
+                text="https://bluecp.xyz/download/blueapp.apk"
+                :size="100"
+                :margin="0"
+              />
+            </div>
+          </template>
+          <el-icon color="#60666f" class="no-inherit">
+            <Iphone />
+          </el-icon>
+        </el-tooltip>
+      </div>
+      <el-dropdown trigger="click" style="cursor: pointer">
         <div style="display: flex">
           <p>{{ info.nickName }}</p>
           <img class="avatar" :src="info.headImg" alt="" />
@@ -44,6 +65,8 @@ import { ElMessage } from "element-plus";
 import { useAppStore } from "@/store/modules/app";
 import { getMenuList } from "@/api/menu";
 import { useUserStore } from "@/store/modules/user";
+import { Vue3NextQrcode } from "vue3-next-qrcode";
+import "vue3-next-qrcode/es/style.css";
 const user = useUserStore();
 const app = useAppStore();
 defineOptions({
@@ -53,7 +76,9 @@ const breadList = ref([]);
 const router = useRouter();
 const menusList = ref([]);
 const route = useRoute();
+const getErweima = () => {};
 onMounted(async () => {
+  getErweima();
   const res = await getMenuList();
   menusList.value = res.data.filter((item) => item.type != 2);
   console.log(">>>route>>", menusList.value);
@@ -115,7 +140,17 @@ watch(
   .app-header__right {
     display: flex;
     align-items: center;
-
+    .phone-area {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      font-size: 15px;
+      color: #60666f;
+      cursor: pointer;
+      .no-inherit {
+        font-size: 18px;
+      }
+    }
     p {
       margin-right: 10px;
     }

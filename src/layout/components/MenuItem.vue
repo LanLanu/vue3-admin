@@ -2,6 +2,7 @@
   <div>
     <el-sub-menu
       v-if="hasChild"
+      v-show="props.model.isShow == 1"
       :index="props.model.router || props.model.name"
     >
       <template #title>
@@ -18,7 +19,11 @@
         :model="item"
       ></MenuItem>
     </el-sub-menu>
-    <el-menu-item v-else :index="props.model.router || ''">
+    <el-menu-item
+      v-else
+      v-show="props.model.isShow == 1"
+      :index="props.model.router || ''"
+    >
       <el-icon>
         <component :is="props.model.icon"></component>
       </el-icon>

@@ -1,6 +1,9 @@
+// 生产环境禁止console控制台
+// import "../src/utils/console"; // 必须最顶部
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
+// 使用webworker
 /**
  * 完整引入
  */

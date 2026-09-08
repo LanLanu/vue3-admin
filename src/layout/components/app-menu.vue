@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 import MenuItem from "./MenuItem.vue";
@@ -40,10 +40,8 @@ const handleSkipRouter = (index) => {
 <style scoped lang="scss">
 .app-menu {
   height: 100%;
-
   .el-menu:not(.el-menu--collapse) {
     width: 200px;
-    overflow: hidden;
     height: 100%;
   }
 

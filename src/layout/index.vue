@@ -1,5 +1,5 @@
 <template>
-  <div class="app-layout">
+  <div class="app-layout" v-waterMarker="'bluecp'">
     <div class="app-layout__left">
       <appMenu></appMenu>
     </div>
@@ -26,8 +26,13 @@ import appMenu from "./components/app-menu.vue";
 
   .app-layout__left {
     overflow: hidden;
+    overflow-y: auto;
+    scrollbar-width: none; /* firefox */
+    -ms-overflow-style: none; /* ie/旧edge */
   }
-
+  ::v-deep(.app-layout__left::-webkit-scrollbar) {
+    display: none; /* chrome、safari、新版edge */
+  }
   .app-layout__right {
     flex: 1;
     overflow: hidden;
@@ -40,7 +45,7 @@ import appMenu from "./components/app-menu.vue";
 
     .app-layout__container {
       flex: 1;
-      background-color: #e8e5e5;
+      background-color: #fafafa;
       padding: 10px;
       box-sizing: border-box;
       overflow: auto;

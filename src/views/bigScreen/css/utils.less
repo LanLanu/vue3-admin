@@ -1,0 +1,72 @@
+  // 默认设计稿的宽度
+@designWidth: 1920;
+
+// 默认设计稿的高度
+@designHeight: 960;
+
+.px2vw(@name, @px) {
+  @{name}: (@px / @designWidth) * 100vw;
+}
+.px2vwi(@name, @px) {
+  @{name}: (@px / @designWidth) * 100vw !important;
+}
+
+.px2vh(@name, @px) {
+  @{name}: (@px / @designHeight) * 100vh;
+}
+.px2vh-vw(@name, @px) {
+  // @{name}: (@px / @designHeight) * 100vh;
+  @{name}: (@px / @designHeight) * (100vw * @designHeight / @designWidth);
+}
+.px2vh_vw(@name, @px) {
+  // @{name}: (@px / @designHeight) * 100vh;
+  @{name}: (@px / @designHeight) * (100vw * @designHeight / @designWidth);
+}
+
+.px2font(@px) {
+  font-size: (@px / @designWidth) * 100vw;
+}
+.px2pd(@px) {
+  padding-left:  (@px / @designWidth) * 100vw;
+  padding-right:  (@px / @designWidth) * 100vw;
+  padding-top:  (@px / @designHeight) * 100vh;
+  padding-bottom:  (@px / @designHeight) * 100vh;
+}
+.px2heightcalc(@percent,@px){
+  height: calc(@percent - (@px / @designHeight) * 100vh);
+}
+.px2widthcalc(@percent,@px){
+  height: calc(@percent - (@px / @designWidth) * 100vw);
+}
+
+.px2mlr(@px){
+  margin-left: (@px / @designWidth) * 100vw;
+  margin-right: (@px / @designWidth) * 100vw;
+}
+.px2mtb(@px){
+  margin-top: (@px / @designHeight) * 100vh;
+  margin-bottom: (@px / @designHeight) * 100vh;
+}
+.px2plr(@px){
+  padding-left: (@px / @designWidth) * 100vw;
+  padding-right: (@px / @designWidth) * 100vw;
+}
+.px2ptb(@px){
+  padding-top: (@px / @designHeight) * 100vh;
+  padding-bottom: (@px / @designHeight) * 100vh;
+}
+.px2padding(@tpx,@lpx){
+  padding-top: (@tpx / @designHeight) * 100vh;
+  padding-bottom: (@tpx / @designHeight) * 100vh;
+  padding-left: (@lpx / @designWidth) * 100vw;
+  padding-right: (@lpx / @designWidth) * 100vw;
+}
+.px2margin(@tpx,@lpx){
+  margin-top: (@tpx / @designHeight) * 100vh;
+  margin-bottom: (@tpx / @designHeight) * 100vh;
+  margin-left: (@lpx / @designWidth) * 100vw;
+  margin-right: (@lpx / @designWidth) * 100vw;
+}
+.px2vwimp(@px) {
+  width: (@px / @designWidth) * 100vw!important;
+}

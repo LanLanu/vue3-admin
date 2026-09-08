@@ -13,7 +13,8 @@ const instance = axios.create({
   // TODO 处理本地生产环境变量
   // baseURL: "/api",
   baseURL: import.meta.env.VITE_API_BASEURL,
-  timeout: 3 * 1000, // 请求超时3秒
+  // timeout: 3 * 1000, // 请求超时3秒
+  timeout: 120 * 1000, // 请求超时120秒 分片超过20Mb,网速很慢，3s不够上传
 });
 /**
  * 添加请求拦截器

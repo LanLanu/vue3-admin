@@ -4,7 +4,7 @@
       <h1 class="code">404</h1>
       <p class="msg">页面走丢啦</p>
       <p class="desc">您访问的页面不存在或已删除</p>
-      <el-button type="primary" @click="goHome">返回首页</el-button>
+      <el-button type="primary" @click="goHome">返回</el-button>
     </div>
   </div>
 </template>
@@ -14,14 +14,14 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 const goHome = () => {
-  router.push("/dashboard/console");
+  router.back();
 };
 </script>
 
 <style scoped>
 .error-page {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;

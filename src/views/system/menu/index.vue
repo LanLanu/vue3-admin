@@ -4,7 +4,11 @@
       <el-button type="primary" plain size="default" @click="refresh"
         >刷新</el-button
       >
-      <el-button type="primary" size="default" @click="handleAdd"
+      <el-button
+        v-auth="'base:sys:menu:add'"
+        type="primary"
+        size="default"
+        @click="handleAdd"
         >新增</el-button
       >
       <el-button
@@ -12,6 +16,7 @@
         size="default"
         :disabled="!checkList.length"
         @click="handleBatchDel"
+        v-auth="'base:sys:menu:delete'"
         >批量删除</el-button
       >
     </div>
@@ -27,26 +32,38 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="name" label="名称" min-width="90" />
+        <el-table-column prop="name" label="名称" min-width="120" />
         <el-table-column prop="type" label="类型" min-width="60">
           <template #default="{ row }">
-            <el-tag>{{ getType(row.type) }}</el-tag>
+            <el-tag v-if="row.type == 0">{{ getType(row.type) }}</el-tag>
+            <el-tag v-if="row.type == 1" type="success">{{
+              getType(row.type)
+            }}</el-tag>
+            <el-tag v-if="row.type == 2" type="warning">{{
+              getType(row.type)
+            }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="router" label="路由地址" min-width="110" />
         <el-table-column prop="viewPath" label="组件地址" min-width="110">
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" min-width="90">
+        <el-table-column prop="createTime" label="创建时间" min-width="70">
           <template #default="row">{{
             dayjs(row.createTime).format("YYYY-MM-DD")
           }}</template>
         </el-table-column>
-        <el-table-column prop="updateTime" label="更新时间" min-width="90">
+        <el-table-column prop="updateTime" label="更新时间" min-width="70">
           <template #default="row">{{
             dayjs(row.updateTime).format("YYYY-MM-DD")
           }}</template>
         </el-table-column>
-        <el-table-column prop="operate" label="操作" align="center" width="180">
+        <el-table-column
+          v-auth="'base:sys:menu:update'"
+          prop="operate"
+          label="操作"
+          align="center"
+          width="140"
+        >
           <template #default="{ row }">
             <el-button
               type="primary"
@@ -55,7 +72,12 @@
               @click="handleEdit(row)"
               >编辑</el-button
             >
-            <el-button type="danger" plain size="small" @click="handleDel(row)"
+            <el-button
+              v-auth="'base:sys:menu:delete'"
+              type="danger"
+              plain
+              size="small"
+              @click="handleDel(row)"
               >删除</el-button
             >
           </template>
