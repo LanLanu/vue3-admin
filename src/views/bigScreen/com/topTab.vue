@@ -27,7 +27,7 @@
           <div class="divider"></div>
           <div class="nav-item" @click.stop="handleTodo">
             <img src="../img/todo.png" />
-            <span class="nav-text">我的待办</span>
+            <span class="nav-text">主控台</span>
           </div>
           <div class="divider"></div>
           <div class="nav-item" @click.stop="handleSystemManage">
@@ -63,10 +63,13 @@ export default {
   },
   methods: {
     handleTodo() {
-      this.$emit("back", true);
+      this.$router.push("/");
+      //
+      // this.$emit("back", true);
     },
     handleSystemManage() {
-      this.$emit("back", false);
+      this.$router.push("/system/menu");
+      // this.$emit("back", false);
     },
     handleClickMenu() {
       this.$emit("backMenu");

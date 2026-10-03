@@ -163,7 +163,7 @@ export default {
 .large-screen {
   .px2vw(width, 1920);
   .px2vh(height, 960);
-  background-image: url("./img/bgNew1.png");
+  background-image: url("./img/bgNew3.png");
   background-repeat: no-repeat;
   background-size: cover;
   will-change: background-image;

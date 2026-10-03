@@ -10,7 +10,7 @@
       >规划路线免去经纬度解密，直接获取经纬度</el-button
     >
     <el-button type="primary" @click="handleShowPoint"
-      >自适应，让地图显示所以的动态标记点</el-button
+      >自适应，让地图显示所有的动态标记点</el-button
     >
     <div class="map-area" ref="mapRef"></div>
   </div>

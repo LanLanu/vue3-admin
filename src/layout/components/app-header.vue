@@ -20,7 +20,9 @@
         <el-tooltip content="Bottom center" placement="bottom" effect="light">
           <template #content>
             <div>
-              <div style="margin-bottom: 2px; text-align: center">扫一扫</div>
+              <div style="margin-bottom: 2px; text-align: center">
+                应用篮APP
+              </div>
               <!-- <Vue3NextQrcode
                 text="https://github.com/XiaoDaiGua-Ray/vue3-next-qrcode"
               /> -->
@@ -44,8 +46,12 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item icon="Plus">{{ info.username }}</el-dropdown-item>
-            <el-dropdown-item icon="User">个人中心</el-dropdown-item>
+            <el-dropdown-item icon="Plus" @click="handleTip">{{
+              info.username
+            }}</el-dropdown-item>
+            <el-dropdown-item icon="User" @click="handleTip"
+              >个人中心</el-dropdown-item
+            >
             <!-- <el-dropdown-item icon="SwitchButton">退出登录</el-dropdown-item> -->
             <el-dropdown-item @click="handleLoginOut"
               ><i class="iconfont icon-tuichu"></i>退出登录</el-dropdown-item
@@ -72,6 +78,9 @@ const app = useAppStore();
 defineOptions({
   name: "app-header",
 });
+const handleTip = () => {
+  ElMessage.warning("功能迭代开发中~");
+};
 const breadList = ref([]);
 const router = useRouter();
 const menusList = ref([]);

@@ -2,8 +2,9 @@
   <div class="custom-directive">
     <!-- <h2>自定义指令</h2>
         <input type="text" v-my-directive> -->
-    <h2>水印</h2>
+    <h2 v-if="false">水印</h2>
     <div
+      v-if="false"
       v-waterMarker="'您好啊'"
       style="width: 500px; height: 300px; background-color: antiquewhite"
     ></div>

@@ -2,9 +2,9 @@
   <div>
     <h2>地图</h2>
     <el-button type="primary" @click="handlePoint">打点</el-button>
-    <el-button type="primary" @click="handleMove">移动</el-button>
+    <el-button type="primary" @click="handleMove" v-if="false">移动</el-button>
     <el-button type="primary" @click="handleShowPoint"
-      >自适应，让地图显示所以的动态标记点</el-button
+      >自适应，让地图囊括所有的动态标记点</el-button
     >
     <div class="map-area" ref="mapRef"></div>
   </div>

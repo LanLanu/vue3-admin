@@ -93,8 +93,8 @@ export default {
   data() {
     return {
       // 楼层
-      // stairs: ["24m以上", "20m", "+15m", "+11m", "0m"],
-      stairs: ["24m以上"],
+      stairs: ["24m以上", "20m", "+15m", "+11m", "0m"],
+      // stairs: ["24m以上"],
       systems: ["3R", "KCP", "TCS", "KRT"],
       tempCrewObj: {
         title: "LX",

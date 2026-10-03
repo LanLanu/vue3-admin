@@ -65,15 +65,15 @@
         </el-form-item>
       </el-form>
 
-      <div class="login-more-option">
+      <di class="login-more-option" v-if="false">
         <span>更多方式：</span>
-        <i title="微信" class="iconfont icon-weixin-copy"></i>
-        <i title="微博" class="iconfont icon-weibo"></i>
-        <i title="抖音" class="iconfont icon-douyin"></i>
-        <i title="github" class="iconfont icon-icon-test31"></i>
-        <i title="QQ" class="iconfont icon-QQ"></i>
-        <i title="支付宝" class="iconfont icon-zhifubaozhifu1"></i>
-      </div>
+        <i @click="handleTip" title="微信" class="iconfont icon-weixin-copy"></i>
+        <i @click="handleTip" title="微博" class="iconfont icon-weibo"></i>
+        <i @click="handleTip" title="抖音" class="iconfont icon-douyin"></i>
+        <i @click="handleTip" title="github" class="iconfont icon-icon-test31"></i>
+        <i @click="handleTip" title="QQ" class="iconfont icon-QQ"></i>
+        <i @click="handleTip" title="支付宝" class="iconfont icon-zhifubaozhifu1"></i>
+      </di @click="handleTip"v>
     </div>
     <div class="copyright">
       <a href="https://beian.miit.gov.cn/#/Integrated/index"
@@ -94,6 +94,9 @@ import { ElMessage } from "element-plus";
 import { login } from "@/api/user";
 import { useUserStore } from "@/store/modules/user.js";
 import { User, Lock } from "@element-plus/icons-vue";
+const handleTip = () => {
+  ElMessage.warning("功能迭代开发中~");
+};
 const useStore = useUserStore();
 const router = useRouter();
 const route = useRoute();

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input-number v-model="maxSpeed" :step="1" step-strictly />
+    <!-- <el-input-number v-model="maxSpeed" :step="1" step-strictly /> -->
     <el-upload
       class="upload-demo"
       drag
@@ -14,7 +14,7 @@
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
       <div class="el-upload__text">
         点击上传或拖拽上传{{ directoryFlag ? "文件夹" : "文件" }}，<em
-          >支持上传图片文件（格式支持png和jpeg，大小不超过8Mb）和视频文件（格式支持mp4和mkv，大小不超过4000Mb）</em
+          >支持上传图片文件（格式支持png和jpeg，大小不超过8Mb）和视频文件（格式支持mp4和mkv，大小不超过1000Mb）</em
         >
         <b>限制worker线程计算MD5的数量</b>
       </div>
@@ -298,7 +298,7 @@ const limitConditions = (file) => {
   // 限制条件
   const limitObj = {
     maxImgaeSize: 8, // Mb
-    maxVideoSize: 4000, // Mb
+    maxVideoSize: 2000, // Mb
     // imageLimit: ["image/png", "image/jpeg", "image/gif"],
     imageLimit: ["png", "jpeg", "jpg"],
     videoLimit: ["mp4", "mkv"],

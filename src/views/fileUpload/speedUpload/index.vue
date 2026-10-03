@@ -283,7 +283,7 @@ const limitConditions = (file) => {
   // 限制条件
   const limitObj = {
     maxImgaeSize: 8, // Mb
-    maxVideoSize: 4000, // Mb
+    maxVideoSize: 2000, // Mb
     // imageLimit: ["image/png", "image/jpeg", "image/gif"],
     imageLimit: ["png", "jpeg", "jpg"],
     videoLimit: ["mp4", "mkv"],

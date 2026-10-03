@@ -72,7 +72,7 @@
                       >
                         可多选
                       </div>
-                      <div class="input-filter">
+                      <div class="input-filter" v-if="false">
                         <img class="input-search" src="../img/searchIcon.png"></img>
                         <el-input
                           v-model="inputFilter"
