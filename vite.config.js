@@ -71,7 +71,8 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
         },
         "/agnes-api": {
-          target: "https://api.agnes-ai.cn",
+          // target: "https://api.agnes-ai.cn",
+          target: "http://127.0.0.1:3000",
           changeOrigin: true,
           secure: false,
           rewrite: (path) => path.replace(/^\/agnes-api/, "/v1"),
