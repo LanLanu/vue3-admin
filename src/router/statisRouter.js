@@ -17,6 +17,11 @@ export default [
         component: () => import('@/views/agent/index.vue'),
       },
       {
+        path: '/chartroom',
+        name: 'chartroom',
+        component: () => import('@/views/chartroom/index.vue'),
+      },
+      {
         path: '/403',
         name: '403',
         component: () => import('@/views/error/403.vue'),
