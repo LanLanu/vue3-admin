@@ -54,11 +54,14 @@
 </template>
 
 <script setup>
-import { ref, nextTick, watch, onMounted } from "vue";
+// 导入 Vue 响应式 API、marked(Markdown 解析)、highlight.js(代码高亮) 以及聊天状态管理组合式函数
+import { ref, nextTick, watch, onMounted, onBeforeUnmount } from "vue";
 import { marked } from "marked";
 import hljs from "highlight.js";
 import { useChat } from "./composables/useChat";
 
+// 从 useChat 组合式函数中解构出聊天核心状态和方法：
+// messages-消息列表(响应式)  isStreaming-是否正在流式接收  send-发送  stop-停止  clearHistory-清除  loadHistory-加载历史  ensureWelcome-确保有欢迎语
 const {
   messages,
   isStreaming,
@@ -69,9 +72,12 @@ const {
   ensureWelcome,
 } = useChat();
 
-const inputText = ref("");
-const msgBox = ref(null);
+const inputText = ref(""); // 输入框文本
+const msgBox = ref(null); // 消息滚动容器的 DOM 引用(用于滚动到底部、查询代码块按钮)
 
+// ====== 内容渲染相关 ======
+
+// 转义 HTML 特殊字符，防止用户消息被当作文本执行 XSS；换行符转为 <br>
 function escapeHtml(text) {
   return String(text ?? "")
     .replace(/&/g, "&amp;")
@@ -80,12 +86,14 @@ function escapeHtml(text) {
     .replace(/\n/g, "<br>");
 }
 
+// 转义 HTML 属性值(用于 data-codeblock-copy 属性里的代码内容，防止引号闭合)
 function escapeAttr(text) {
   return String(text ?? "")
     .replace(/&/g, "&amp;")
     .replace(/"/g, "&quot;");
 }
 
+// 用 highlight.js 对代码做高亮；识别语言就用该语言规则，否则自动检测
 function highlightCode(code, lang) {
   const safe = code.replace(/\n$/, "");
   const language = lang && hljs.getLanguage(lang) ? lang : "";
@@ -94,6 +102,7 @@ function highlightCode(code, lang) {
     : hljs.highlightAuto(safe).value;
 }
 
+// 生成一个带「折叠按钮 + 语言标签 + 复制按钮 + 高亮代码体」的完整代码块 HTML 字符串
 function codeBlockHtml(code, lang) {
   const language = (lang || "").trim() || "text";
   const highlighted = highlightCode(code, language);
@@ -131,6 +140,9 @@ function codeBlockHtml(code, lang) {
   );
 }
 
+// 渲染单条消息内容：
+// - 用户消息：只做 HTML 转义(安全，防 XSS)，不渲染 Markdown
+// - AI 消息：先用 marked 把 Markdown 转 HTML，再用正则把 <pre><code> 块替换成带复制/折叠功能的代码块
 function renderContent(m) {
   if (m.role === "user") return escapeHtml(m.content);
 
@@ -155,6 +167,9 @@ function renderContent(m) {
   return html;
 }
 
+// 给消息容器里动态渲染出的代码块按钮(折叠、复制)绑定原生事件。
+// 因为代码块 HTML 是通过 v-html 插入的，Vue 的事件绑定不生效，所以需要手动 querySelectorAll + addEventListener；
+// dataset.bound === "1" 防止重复绑定(流式过程中会多次调用)
 function initCodeBlocks() {
   const msgBoxEl = msgBox.value;
   if (!msgBoxEl) return;
@@ -184,6 +199,7 @@ function initCodeBlocks() {
   });
 }
 
+// 发送消息主流程：校验非空且不在流式中 → 清空输入框 → 调用 useChat.send 发请求 → 等待 DOM 更新 → 重绑代码块按钮 → 滚动到底
 async function handleSend() {
   const text = inputText.value;
   if (!text.trim() || isStreaming.value) return;
@@ -194,6 +210,7 @@ async function handleSend() {
   scrollToBottom();
 }
 
+// 监听 1：消息条数变化(新增消息)时，等待 DOM 更新后重绑代码块按钮并滚动到底
 watch(
   function () {
     return messages.value.length;
@@ -205,6 +222,7 @@ watch(
   },
 );
 
+// 监听 2(深度)：流式过程中 AI 消息 content 被逐字追加，messages 深层变化 → 自动滚动到底(打字机效果)
 watch(
   messages,
   async function () {
@@ -214,18 +232,28 @@ watch(
   { deep: true },
 );
 
+// 把消息容器滚动到最底部(让最新一条消息始终可见)
 function scrollToBottom() {
   if (msgBox.value) {
     msgBox.value.scrollTop = msgBox.value.scrollHeight;
   }
 }
 
+// 组件挂载后：从 localStorage 恢复上次聊天记录(没有则显示欢迎语)，并在 DOM 就绪后初始化已有代码块按钮
 onMounted(function () {
   loadHistory();
   ensureWelcome();
   nextTick(function () {
     initCodeBlocks();
   });
+});
+
+// 组件销毁前(离开本页面/被路由切换卸载)：如果还有流式请求在跑，调用 stop() 主动中断，
+// 避免切走后 fetch 仍在后台继续吐数据、白白耗流量/内存
+onBeforeUnmount(function () {
+  if (isStreaming.value) {
+    stop();
+  }
 });
 </script>
 

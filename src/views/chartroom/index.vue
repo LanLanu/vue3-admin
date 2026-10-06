@@ -414,6 +414,50 @@ async function doClear() {
  * 已有消息不覆盖（按 _key 去重），新增的追加到最前面。
  * 用户主动点击才触发，避免"删了本地又自动冒出来"的体验问题。
  */
+/**
+ * 核心合并逻辑：远程数据（升序旧→新）+ 本地实时消息（r-* key）
+ * 去重规则：远程已有相同内容（text + fromName / sys uid）则丢弃本地 r-* 行
+ */
+function mergeRemoteRows(viewRows, cursor, more) {
+  const remoteSet = new Set(
+    viewRows.map((r) =>
+      r.type === "msg"
+        ? `${r.self ? "self" : r.fromName}:${r.text}`
+        : `sys:${r.uid}`,
+    ),
+  );
+  // 只保留"远程还没有的"实时消息
+  const realtimeRows = messages.value.filter((r) => {
+    if (!r._key || !r._key.startsWith("r-")) return false;
+    const sig =
+      r.type === "msg"
+        ? `${r.self ? "self" : r.fromName}:${r.text}`
+        : `sys:${r.uid}`;
+    return !remoteSet.has(sig);
+  });
+  // 清空后铺远程，再追加剩余实时消息
+  messages.value = [];
+  mergeRows(viewRows, 0);
+  realtimeRows.sort((a, b) => a.at - b.at);
+  realtimeRows.forEach((row) => {
+    const prev = findLastMsgRow(messages.value);
+    if (!prev || row.at - prev.at > TIME_GAP) {
+      messages.value.push({
+        type: "time",
+        text: formatViewTime(row.at),
+        at: row.at,
+        _key: `t-${row.at}`,
+      });
+    }
+    messages.value.push(row);
+  });
+  nextBeforeId.value = cursor;
+  hasMore.value = more;
+  cacheMessage();
+  scrollToBottom();
+}
+
+/** 手动同步按钮入口 */
 async function syncRemoteHistory() {
   if (syncing.value) return;
   syncing.value = true;
@@ -423,13 +467,9 @@ async function syncRemoteHistory() {
       hasMore: more,
       nextBeforeId: cursor,
     } = await getHistory(ROOM_ID, PAGE_SIZE);
-    // 后端行 → 渲染结构 → 过滤自己进入的系统行 → 按 uid 去重
     const viewRows = dedupSystemRows(rows.map(toViewRow).filter(Boolean));
     if (viewRows.length) {
-      // getHistory 返回降序（最新在前），mergeRows 需要正序遍历，反转
-      mergeRows([...viewRows].reverse(), 0);
-      nextBeforeId.value = cursor;
-      hasMore.value = more;
+      mergeRemoteRows(viewRows, cursor, more);
     }
     ElMessage.success(viewRows.length ? "已同步最新记录" : "远程无新记录");
   } catch (e) {
@@ -437,6 +477,24 @@ async function syncRemoteHistory() {
     ElMessage.error("同步失败，请检查网络连接");
   } finally {
     syncing.value = false;
+  }
+}
+
+/** 进房自动同步：本地缓存 + 远程最新，静默合并（不弹 ElMessage） */
+async function autoSyncOnMount() {
+  try {
+    const {
+      messages: rows,
+      hasMore: more,
+      nextBeforeId: cursor,
+    } = await getHistory(ROOM_ID, PAGE_SIZE);
+    const viewRows = dedupSystemRows(rows.map(toViewRow).filter(Boolean));
+    if (viewRows.length) {
+      mergeRemoteRows(viewRows, cursor, more);
+    }
+  } catch (e) {
+    // 远程失败 → 保留本地缓存展示，不弹错误（静默兜底）
+    console.warn("[chatroom] 自动同步失败，使用本地缓存", e);
   }
 }
 
@@ -475,7 +533,7 @@ function pushMessage(msg) {
       _key: `t-${at}`,
     });
   }
-  messages.value.push({ ...msg, at, _key: msg._key || `r-${at}` });
+  messages.value.push({ ...msg, at, _key: `r-${at}` });
   cacheMessage();
   scrollToBottom();
 }
@@ -497,7 +555,10 @@ onMounted(async () => {
     messages.value = cached;
   }
 
-  // 2. 建立 socket 实时连接
+  // 2. 自动同步远程最新记录（合并本地+远程，去重，静默不弹提示）
+  autoSyncOnMount();
+
+  // 3. 建立 socket 实时连接
   socket.value = io(import.meta.env.VITE_SOCKET_URL);
 
   socket.value.on("connect", () => (connStatus.value = "connected"));
